@@ -1,0 +1,28 @@
+name: Build S2AN binary
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Build and Publish binaries
+      run: dotnet build -c Release 
+    - name: Publish Windows
+      run: dotnet publish S2AN.sln -r win-x64 -c Release -o ./publish/windows  --self-contained true  -p:PublishSingleFile=true
+    - name: Publish Linux  
+      run: dotnet publish S2AN.sln -r linux-x64 -c Release -o ./publish/linux  --self-contained true  -p:PublishSingleFile=true 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: my-artifact_linux
+        path:  |
+          ./publish/linux
+          ./publish/windows
