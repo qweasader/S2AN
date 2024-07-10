@@ -55,7 +55,7 @@ namespace S2AN
                     if (!o.Suricata)
                     {
                         LoadMismatchSearchMatrix(o);
-                        foreach (var ruleFilePath in Directory.EnumerateFiles(o.RulesDirectory, "*.yml", SearchOption.AllDirectories))
+                        foreach (var ruleFilePath in Directory.EnumerateFiles(o.RulesDirectory, "*.yaml", SearchOption.AllDirectories))
                         {
                             try
                             {
